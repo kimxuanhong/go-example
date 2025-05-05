@@ -1,4 +1,4 @@
-package entity
+package repository
 
 import (
 	"github.com/google/uuid"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type User struct {
+type UserModel struct {
 	ID        string    `gorm:"column:id;primaryKey;type:uuid"`
 	PartnerId string    `gorm:"column:partner_id"`
 	Total     int       `gorm:"column:total"`
@@ -19,21 +19,21 @@ type User struct {
 	UpdatedAt time.Time `gorm:"column:updated_at"`
 }
 
-func (u *User) TableName() string {
+func (u *UserModel) TableName() string {
 	return "user_tbl"
 }
 
-func (u *User) BeforeCreate(ctx *gorm.DB) (err error) {
+func (u *UserModel) BeforeCreate(ctx *gorm.DB) (err error) {
 	u.ID = uuid.NewString()
 	u.CreatedAt = time.Now()
 	return
 }
 
-func (u *User) BeforeUpdate(ctx *gorm.DB) (err error) {
+func (u *UserModel) BeforeUpdate(ctx *gorm.DB) (err error) {
 	u.UpdatedAt = time.Now()
 	return
 }
 
-func (u *User) GetTotal() int {
+func (u *UserModel) GetTotal() int {
 	return u.Total
 }

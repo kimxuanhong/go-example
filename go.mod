@@ -6,7 +6,8 @@ require github.com/gin-gonic/gin v1.10.0
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/kimxuanhong/go-http v1.0.1
+	github.com/google/wire v0.6.0
+	github.com/kimxuanhong/go-http v1.0.4
 	github.com/kimxuanhong/go-postgres v1.0.2
 	github.com/kimxuanhong/go-redis v1.0.1
 	github.com/kimxuanhong/go-utils v1.0.3
