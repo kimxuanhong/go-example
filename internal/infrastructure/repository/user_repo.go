@@ -24,5 +24,8 @@ func (r *userRepo) GetByUsername(ctx context.Context, userName string) (*domain.
 }
 
 func (r *userRepo) Store(ctx context.Context, user *domain.User) (*domain.User, error) {
+	if err := r.repDB.Insert(ctx, user); err != nil {
+		return nil, err
+	}
 	return nil, nil
 }
