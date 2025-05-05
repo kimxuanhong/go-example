@@ -5,10 +5,12 @@ go 1.23.1
 require github.com/gin-gonic/gin v1.10.0
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/kimxuanhong/go-http v1.0.1
-	github.com/kimxuanhong/go-postgres v0.0.0-20250429065706-8c188f8256d3
-	github.com/kimxuanhong/go-redis v0.0.0-20250429065752-47ecd61d4d66
+	github.com/kimxuanhong/go-postgres v1.0.2
+	github.com/kimxuanhong/go-redis v1.0.1
 	github.com/kimxuanhong/go-utils v1.0.3
+	gorm.io/gorm v1.25.10
 )
 
 require (
@@ -53,5 +55,4 @@ require (
 	google.golang.org/protobuf v1.36.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.11 // indirect
-	gorm.io/gorm v1.25.10 // indirect
 )

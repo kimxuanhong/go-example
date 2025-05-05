@@ -2,3 +2,20 @@ server:
   host: localhost
   port: 3000
   mode: debug
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "keycloak"
+  password: "password"
+  name: "keycloak"
+  schema: "public"
+  dbname: "keycloak"
+  debug: true
+  sslmode: "disable"
+
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  database: 0

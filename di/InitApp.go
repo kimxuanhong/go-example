@@ -1,7 +1,7 @@
 //go:build !wireinject
 
 //go:generate go run -mod=mod github.com/google/wire/cmd/wire
-package app
+package di
 
 import (
 	"github.com/kimxuanhong/go-http/server"
@@ -37,8 +37,8 @@ func InitApp() (*App, error) {
 
 type App struct {
 	Server   server.Server
-	Postgres *postgres.Postgres
-	Redis    *redis.Redis
+	Postgres postgres.Postgres
+	Redis    redis.Redis
 }
 
 // Server luôn được khởi tạo từ cấu hình
@@ -47,7 +47,7 @@ func provideServer(cfg *Config) (server.Server, error) {
 }
 
 // Postgres chỉ được khởi tạo nếu có config postgres
-func providePostgres(cfg *Config) (*postgres.Postgres, error) {
+func providePostgres(cfg *Config) (postgres.Postgres, error) {
 	if cfg.Postgres == nil {
 		return nil, nil
 	}
@@ -55,7 +55,7 @@ func providePostgres(cfg *Config) (*postgres.Postgres, error) {
 }
 
 // Redis chỉ được khởi tạo nếu có config redis
-func provideRedis(cfg *Config) (*redis.Redis, error) {
+func provideRedis(cfg *Config) (redis.Redis, error) {
 	if cfg.Redis == nil {
 		return nil, nil
 	}

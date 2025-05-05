@@ -37,6 +37,8 @@ github.com/goccy/go-json v0.10.2/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MG
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
 github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
 github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a h1:bbPeKD0xmW/Y25WS6cokEszi5g+S0QxI/d45PkRi7Nk=
@@ -53,10 +55,10 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/kimxuanhong/go-http v1.0.1 h1:L3KJpIufI5j57nHknE7zeoWkjJ6kYxCtnZY7J1l4t7Y=
 github.com/kimxuanhong/go-http v1.0.1/go.mod h1:Qs0WmB/HJ+LXpKAsWYHZXio+sdaAgOtWL0tol4WJ+O0=
-github.com/kimxuanhong/go-postgres v0.0.0-20250429065706-8c188f8256d3 h1:2utM509IQxIffXZ9iTcmm51BE787JMxmP2TT73um1u8=
-github.com/kimxuanhong/go-postgres v0.0.0-20250429065706-8c188f8256d3/go.mod h1:nC5x2n9sErNZTm3H7sTACL7bkDoD9mY+8EwkhYuNzr0=
-github.com/kimxuanhong/go-redis v0.0.0-20250429065752-47ecd61d4d66 h1:lqDnz0++YqLhEaOXJEy6kCbdFC9Icq7QWSVdjZrYa6o=
-github.com/kimxuanhong/go-redis v0.0.0-20250429065752-47ecd61d4d66/go.mod h1:oFYm8WB27ltPA22Suu3L2bNMzArlvqMQB97xw3iSUZo=
+github.com/kimxuanhong/go-postgres v1.0.2 h1:RJklLvXgdm4mwmalRSweMoP1JQvZA2t6ijy60AsniIk=
+github.com/kimxuanhong/go-postgres v1.0.2/go.mod h1:nC5x2n9sErNZTm3H7sTACL7bkDoD9mY+8EwkhYuNzr0=
+github.com/kimxuanhong/go-redis v1.0.1 h1:h/gerDguD/H5OMjxOye1oMlL0SoK299YhxVr7imVTXQ=
+github.com/kimxuanhong/go-redis v1.0.1/go.mod h1:oFYm8WB27ltPA22Suu3L2bNMzArlvqMQB97xw3iSUZo=
 github.com/kimxuanhong/go-utils v1.0.3 h1:fNZFwEBt7NNHhu6JtXVK+Ojl3e/VBPnhpzVF8+oMulk=
 github.com/kimxuanhong/go-utils v1.0.3/go.mod h1:PjUwDxTWlailXBuZuQdDCynbkDKEcGLRa665JMahtWE=
 github.com/klauspost/cpuid/v2 v2.0.9/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=

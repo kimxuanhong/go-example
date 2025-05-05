@@ -1,4 +1,4 @@
-package app
+package di
 
 import (
 	"github.com/kimxuanhong/go-http/server"
