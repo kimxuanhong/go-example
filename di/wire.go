@@ -8,6 +8,8 @@ import (
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
+	"github.com/kimxuanhong/go-example/pkg"
+	"github.com/kimxuanhong/go-http/client"
 	"github.com/kimxuanhong/go-http/server"
 	"github.com/kimxuanhong/go-postgres/postgres"
 	"github.com/kimxuanhong/go-redis/redis"
@@ -15,9 +17,12 @@ import (
 )
 
 type Config struct {
-	Server   *server.Config   `yaml:"server"`
-	Redis    *redis.Config    `yaml:"redis,omitempty"`
-	Postgres *postgres.Config `yaml:"postgres,omitempty"`
+	Server          *server.Config   `yaml:"server"`
+	Redis           *redis.Config    `yaml:"redis,omitempty"`
+	Postgres        *postgres.Config `yaml:"postgres,omitempty"`
+	ReplicaPostgres *postgres.Config `yaml:"replica_postgres,omitempty"`
+	AccountClient   *client.Config   `yaml:"account_client,omitempty"`
+	ConsumerClient  *client.Config   `yaml:"consumer_client,omitempty"`
 }
 
 type App struct {
@@ -31,6 +36,9 @@ func InitApp() (*App, error) {
 		LoadConfig,
 		InitHttpServer,
 		InitPostgres,
+		InitReplicaPostgres,
+		InitAccountClient,
+		InitConsumerClient,
 		repository.NewUserRepo,
 		usecase.NewUserUsecase,
 		handler.NewUserHandler,
@@ -54,11 +62,23 @@ func InitHttpServer(cfg *Config) (server.Server, error) {
 }
 
 // Postgres chỉ được khởi tạo nếu có config postgres
-func InitPostgres(cfg *Config) (postgres.Postgres, error) {
+func InitPostgres(cfg *Config) (pkg.MainPostgres, error) {
 	return postgres.NewPostgres(cfg.Postgres)
+}
+
+func InitReplicaPostgres(cfg *Config) (pkg.ReplicaPostgres, error) {
+	return postgres.NewPostgres(cfg.ReplicaPostgres)
 }
 
 // Redis chỉ được khởi tạo nếu có config redis
 func InitRedis(cfg *Config) (redis.Redis, error) {
 	return redis.NewRedis(cfg.Redis)
+}
+
+func InitAccountClient(cfg *Config) pkg.AccountClient {
+	return client.NewClient(cfg.AccountClient)
+}
+
+func InitConsumerClient(cfg *Config) pkg.ConsumerClient {
+	return client.NewClient(cfg.ConsumerClient)
 }

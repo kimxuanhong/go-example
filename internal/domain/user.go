@@ -15,4 +15,5 @@ type User struct {
 
 type UserRepository interface {
 	GetByUsername(ctx context.Context, userName string) (*User, error)
+	Store(ctx context.Context, user *User) (*User, error)
 }
