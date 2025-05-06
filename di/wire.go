@@ -7,11 +7,12 @@ import (
 	"github.com/google/wire"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/facade"
+	infraClient "github.com/kimxuanhong/go-example/internal/infrastructure/client"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
-	"github.com/kimxuanhong/go-http/client"
+	httpClient "github.com/kimxuanhong/go-http/client"
 	"github.com/kimxuanhong/go-http/server"
 	"github.com/kimxuanhong/go-postgres/postgres"
 	"github.com/kimxuanhong/go-redis/redis"
@@ -19,12 +20,12 @@ import (
 )
 
 type Config struct {
-	Server          *server.Config   `yaml:"server"`
-	Redis           *redis.Config    `yaml:"redis,omitempty"`
-	Postgres        *postgres.Config `yaml:"postgres,omitempty"`
-	ReplicaPostgres *postgres.Config `yaml:"replica_postgres,omitempty"`
-	AccountClient   *client.Config   `yaml:"account_client,omitempty"`
-	ConsumerClient  *client.Config   `yaml:"consumer_client,omitempty"`
+	Server          *server.Config     `yaml:"server"`
+	Redis           *redis.Config      `yaml:"redis,omitempty"`
+	Postgres        *postgres.Config   `yaml:"postgres,omitempty"`
+	ReplicaPostgres *postgres.Config   `yaml:"replica_postgres,omitempty"`
+	AccountClient   *httpClient.Config `yaml:"account_client,omitempty"`
+	ConsumerClient  *httpClient.Config `yaml:"consumer_client,omitempty"`
 }
 
 type App struct {
@@ -41,6 +42,8 @@ func InitApp() (*App, error) {
 		InitReplicaPostgres,
 		InitAccountClient,
 		InitConsumerClient,
+		infraClient.NewAccountClient,
+		infraClient.NewConsumerClient,
 		repository.NewUserRepo,
 		validator.NewUserValidator,
 		usecase.NewUserUsecase,
@@ -80,9 +83,9 @@ func InitRedis(cfg *Config) (redis.Redis, error) {
 }
 
 func InitAccountClient(cfg *Config) pkg.AccountClient {
-	return client.NewClient(cfg.AccountClient)
+	return httpClient.NewClient(cfg.AccountClient)
 }
 
 func InitConsumerClient(cfg *Config) pkg.ConsumerClient {
-	return client.NewClient(cfg.ConsumerClient)
+	return httpClient.NewClient(cfg.ConsumerClient)
 }

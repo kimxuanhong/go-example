@@ -8,11 +8,13 @@ package di
 
 import (
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
+	"github.com/kimxuanhong/go-example/internal/facade"
+	"github.com/kimxuanhong/go-example/internal/infrastructure/client"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
-	"github.com/kimxuanhong/go-http/client"
+	client2 "github.com/kimxuanhong/go-http/client"
 	"github.com/kimxuanhong/go-http/server"
 	"github.com/kimxuanhong/go-postgres/postgres"
 	"github.com/kimxuanhong/go-redis/redis"
@@ -40,10 +42,13 @@ func InitApp() (*App, error) {
 	}
 	userRepository := repository.NewUserRepo(mainPostgres, replicaPostgres)
 	accountClient := InitAccountClient(config)
+	clientAccountClient := client.NewAccountClient(accountClient)
 	consumerClient := InitConsumerClient(config)
+	clientConsumerClient := client.NewConsumerClient(consumerClient)
 	userValidator := validator.NewUserValidator()
-	userUsecase := usecase.NewUserUsecase(userRepository, accountClient, consumerClient, userValidator)
-	userHandler := handler.NewUserHandler(userUsecase)
+	userUsecase := usecase.NewUserUsecase(userRepository, clientAccountClient, clientConsumerClient, userValidator)
+	userFacade := facade.NewUserFacade(userUsecase)
+	userHandler := handler.NewUserHandler(userFacade)
 	app := &App{
 		Cfg:         config,
 		Server:      server,
@@ -59,8 +64,8 @@ type Config struct {
 	Redis           *redis.Config    `yaml:"redis,omitempty"`
 	Postgres        *postgres.Config `yaml:"postgres,omitempty"`
 	ReplicaPostgres *postgres.Config `yaml:"replica_postgres,omitempty"`
-	AccountClient   *client.Config   `yaml:"account_client,omitempty"`
-	ConsumerClient  *client.Config   `yaml:"consumer_client,omitempty"`
+	AccountClient   *client2.Config  `yaml:"account_client,omitempty"`
+	ConsumerClient  *client2.Config  `yaml:"consumer_client,omitempty"`
 }
 
 type App struct {
@@ -98,9 +103,9 @@ func InitRedis(cfg *Config) (redis.Redis, error) {
 }
 
 func InitAccountClient(cfg *Config) pkg.AccountClient {
-	return client.NewClient(cfg.AccountClient)
+	return client2.NewClient(cfg.AccountClient)
 }
 
 func InitConsumerClient(cfg *Config) pkg.ConsumerClient {
-	return client.NewClient(cfg.ConsumerClient)
+	return client2.NewClient(cfg.ConsumerClient)
 }
