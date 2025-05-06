@@ -40,6 +40,7 @@ func InitApp() (*App, error) {
 		InitHttpServer,
 		InitPostgres,
 		InitReplicaPostgres,
+		InitRedis,
 		InitAccountClient,
 		InitConsumerClient,
 		infraClient.NewAccountClient,

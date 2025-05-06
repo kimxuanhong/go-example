@@ -40,7 +40,11 @@ func InitApp() (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-	userRepository := repository.NewUserRepo(mainPostgres, replicaPostgres)
+	redis, err := InitRedis(config)
+	if err != nil {
+		return nil, err
+	}
+	userRepository := repository.NewUserRepo(mainPostgres, replicaPostgres, redis)
 	accountClient := InitAccountClient(config)
 	clientAccountClient := client.NewAccountClient(accountClient)
 	consumerClient := InitConsumerClient(config)
