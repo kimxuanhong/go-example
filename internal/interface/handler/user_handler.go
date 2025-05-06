@@ -4,27 +4,27 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kimxuanhong/go-example/internal/facade"
 	"github.com/kimxuanhong/go-example/internal/interface/dto"
-	"github.com/kimxuanhong/go-example/internal/usecase"
 )
 
 type UserHandler struct {
-	uc *usecase.UserUsecase
+	userFacade *facade.UserFacade
 }
 
-func NewUserHandler(uc *usecase.UserUsecase) *UserHandler {
-	return &UserHandler{uc}
+func NewUserHandler(userFacade *facade.UserFacade) *UserHandler {
+	return &UserHandler{userFacade}
 }
 
 func (h *UserHandler) GetUser(c *gin.Context) {
 	userName := c.Param("user")
-	user, err := h.uc.GetUser(c, userName)
+	user, err := h.userFacade.GetUser(c, userName)
 	if err != nil {
 		HandleError(c, err)
 		return
 	}
 
-	SendResponse(c, http.StatusOK, dto.ToUserResponse(user))
+	SendResponse(c, http.StatusOK, user)
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
@@ -33,14 +33,13 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user := dto.ToUserDomain(&req)
-	createdUser, err := h.uc.CreateUser(c, user)
+	createdUser, err := h.userFacade.CreateUser(c, &req)
 	if err != nil {
 		HandleError(c, err)
 		return
 	}
 
-	SendResponse(c, http.StatusCreated, dto.ToUserResponse(createdUser))
+	SendResponse(c, http.StatusCreated, createdUser)
 }
 
 func (h *UserHandler) UpdateUser(c *gin.Context) {
@@ -50,14 +49,11 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	user := dto.ToUserDomain(&req)
-	user.UserName = userName // Ensure username from path is used
-
-	updatedUser, err := h.uc.UpdateUser(c, user)
+	updatedUser, err := h.userFacade.UpdateUser(c, userName, &req)
 	if err != nil {
 		HandleError(c, err)
 		return
 	}
 
-	SendResponse(c, http.StatusOK, dto.ToUserResponse(updatedUser))
+	SendResponse(c, http.StatusOK, updatedUser)
 }

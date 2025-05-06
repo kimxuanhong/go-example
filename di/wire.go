@@ -6,6 +6,7 @@ package di
 import (
 	"github.com/google/wire"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
+	"github.com/kimxuanhong/go-example/internal/facade"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
@@ -43,6 +44,7 @@ func InitApp() (*App, error) {
 		repository.NewUserRepo,
 		validator.NewUserValidator,
 		usecase.NewUserUsecase,
+		facade.NewUserFacade,
 		handler.NewUserHandler,
 		wire.Struct(new(App), "*"),
 	)
