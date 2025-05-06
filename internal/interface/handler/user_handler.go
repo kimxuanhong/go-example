@@ -1,11 +1,9 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	domainErrors "github.com/kimxuanhong/go-example/internal/domain/errors"
 	"github.com/kimxuanhong/go-example/internal/interface/dto"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 )
@@ -22,51 +20,33 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	userName := c.Param("user")
 	user, err := h.uc.GetUser(c, userName)
 	if err != nil {
-		switch {
-		case errors.Is(err, domainErrors.ErrNotFound):
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		case errors.Is(err, domainErrors.ErrValidation):
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		}
+		HandleError(c, err)
 		return
 	}
 
-	response := dto.ToUserResponse(user)
-	c.JSON(http.StatusOK, response)
+	SendResponse(c, http.StatusOK, dto.ToUserResponse(user))
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req dto.UserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if !BindAndValidate(c, &req) {
 		return
 	}
 
 	user := dto.ToUserDomain(&req)
 	createdUser, err := h.uc.CreateUser(c, user)
 	if err != nil {
-		switch {
-		case errors.Is(err, domainErrors.ErrValidation):
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		case errors.Is(err, domainErrors.ErrInternal):
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		}
+		HandleError(c, err)
 		return
 	}
 
-	response := dto.ToUserResponse(createdUser)
-	c.JSON(http.StatusCreated, response)
+	SendResponse(c, http.StatusCreated, dto.ToUserResponse(createdUser))
 }
 
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	userName := c.Param("user")
 	var req dto.UserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if !BindAndValidate(c, &req) {
 		return
 	}
 
@@ -75,19 +55,9 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 
 	updatedUser, err := h.uc.UpdateUser(c, user)
 	if err != nil {
-		switch {
-		case errors.Is(err, domainErrors.ErrNotFound):
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		case errors.Is(err, domainErrors.ErrValidation):
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		case errors.Is(err, domainErrors.ErrInternal):
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		}
+		HandleError(c, err)
 		return
 	}
 
-	response := dto.ToUserResponse(updatedUser)
-	c.JSON(http.StatusOK, response)
+	SendResponse(c, http.StatusOK, dto.ToUserResponse(updatedUser))
 }
