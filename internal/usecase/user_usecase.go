@@ -2,7 +2,10 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/kimxuanhong/go-example/internal/domain"
+	"github.com/kimxuanhong/go-example/internal/domain/errors"
+	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/pkg"
 )
 
@@ -10,12 +13,74 @@ type UserUsecase struct {
 	repo           domain.UserRepository
 	accountClient  pkg.AccountClient
 	consumerClient pkg.ConsumerClient
+	validator      validator.UserValidator
 }
 
-func NewUserUsecase(repo domain.UserRepository, accountClient pkg.AccountClient, consumerClient pkg.ConsumerClient) *UserUsecase {
-	return &UserUsecase{repo, accountClient, consumerClient}
+func NewUserUsecase(
+	repo domain.UserRepository,
+	accountClient pkg.AccountClient,
+	consumerClient pkg.ConsumerClient,
+	validator validator.UserValidator,
+) *UserUsecase {
+	return &UserUsecase{
+		repo:           repo,
+		accountClient:  accountClient,
+		consumerClient: consumerClient,
+		validator:      validator,
+	}
 }
 
 func (uc *UserUsecase) GetUser(ctx context.Context, userName string) (*domain.User, error) {
-	return uc.repo.GetByUsername(ctx, userName)
+	if userName == "" {
+		return nil, errors.NewDomainError("VALIDATION_ERROR", "username is required", errors.ErrValidation)
+	}
+
+	user, err := uc.repo.GetByUsername(ctx, userName)
+	if err != nil {
+		return nil, errors.NewDomainError("NOT_FOUND", "user not found", errors.ErrNotFound)
+	}
+
+	return user, nil
+}
+
+func (uc *UserUsecase) CreateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
+	// Validate user
+	if err := uc.validator.Validate(user); err != nil {
+		return nil, err
+	}
+
+	// Check if user already exists
+	existingUser, err := uc.repo.GetByUsername(ctx, user.UserName)
+	if err == nil && existingUser != nil {
+		return nil, errors.NewDomainError("DUPLICATE", "user already exists", errors.ErrValidation)
+	}
+
+	// Create user
+	createdUser, err := uc.repo.Store(ctx, user)
+	if err != nil {
+		return nil, errors.NewDomainError("INTERNAL_ERROR", "failed to create user", errors.ErrInternal)
+	}
+
+	return createdUser, nil
+}
+
+func (uc *UserUsecase) UpdateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
+	// Validate user
+	if err := uc.validator.Validate(user); err != nil {
+		return nil, err
+	}
+
+	// Check if user exists
+	existingUser, err := uc.repo.GetByUsername(ctx, user.UserName)
+	if err != nil || existingUser == nil {
+		return nil, errors.NewDomainError("NOT_FOUND", "user not found", errors.ErrNotFound)
+	}
+
+	// Update user
+	updatedUser, err := uc.repo.Store(ctx, user)
+	if err != nil {
+		return nil, errors.NewDomainError("INTERNAL_ERROR", "failed to update user", errors.ErrInternal)
+	}
+
+	return updatedUser, nil
 }

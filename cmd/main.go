@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kimxuanhong/go-example/api"
 	"github.com/kimxuanhong/go-example/di"
-	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
-	"log"
 )
 
 func main() {
@@ -27,10 +27,4 @@ func Pong() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
 	}
-}
-
-func Test(c *gin.Context) (interface{}, error) {
-	return &repository.UserModel{
-		UserName: "hong",
-	}, nil
 }
