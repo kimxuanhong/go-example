@@ -65,6 +65,14 @@ github.com/kimxuanhong/go-http v1.0.3 h1:1IV06h3y+wgUTLt7n9KgIkZwQ0QXNJ8VLnR+BYF
 github.com/kimxuanhong/go-http v1.0.3/go.mod h1:Qs0WmB/HJ+LXpKAsWYHZXio+sdaAgOtWL0tol4WJ+O0=
 github.com/kimxuanhong/go-http v1.0.4 h1:fk1p821dC0BLvMqGlqeXmM9CN88zrrENMJlTEWFgAnY=
 github.com/kimxuanhong/go-http v1.0.4/go.mod h1:Qs0WmB/HJ+LXpKAsWYHZXio+sdaAgOtWL0tol4WJ+O0=
+github.com/kimxuanhong/go-logger v1.0.1 h1:CDv05i5bnlf+84YVJVVzKrtFAHXcG3S/tezPqOn184M=
+github.com/kimxuanhong/go-logger v1.0.1/go.mod h1:RQVdU6NfknN6i/Q/Xn8x6nuGuzPuKkopW/TQHyb1SRA=
+github.com/kimxuanhong/go-middleware v1.0.1 h1:wxCNWDPG/0MsWr2tBM9fDj+mexEGuIga6kkOoX+mATA=
+github.com/kimxuanhong/go-middleware v1.0.1/go.mod h1:c0jQjFxa7nm72nrcmJ9SVyPYphfYdYx51TiBRWwFihk=
+github.com/kimxuanhong/go-middleware v1.0.2 h1:G9EuLICMXO6t/3Ov9YJUTmwFxnrZogBm1lshp4m/CEw=
+github.com/kimxuanhong/go-middleware v1.0.2/go.mod h1:jOPEF3tD9GxkUQWqcS4mWOQ1RazmmURcjKZGnmY6OnI=
+github.com/kimxuanhong/go-middleware v1.0.3 h1:IErQLMuYDmyBvs9c5Cfv5D0xj2RfoecJUr9cwevxHWY=
+github.com/kimxuanhong/go-middleware v1.0.3/go.mod h1:jOPEF3tD9GxkUQWqcS4mWOQ1RazmmURcjKZGnmY6OnI=
 github.com/kimxuanhong/go-postgres v1.0.2 h1:RJklLvXgdm4mwmalRSweMoP1JQvZA2t6ijy60AsniIk=
 github.com/kimxuanhong/go-postgres v1.0.2/go.mod h1:nC5x2n9sErNZTm3H7sTACL7bkDoD9mY+8EwkhYuNzr0=
 github.com/kimxuanhong/go-redis v1.0.1 h1:h/gerDguD/H5OMjxOye1oMlL0SoK299YhxVr7imVTXQ=
