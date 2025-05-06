@@ -7,6 +7,7 @@
 package di
 
 import (
+	"github.com/google/wire"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/facade"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/client"
@@ -78,7 +79,35 @@ type App struct {
 	UserHandler *handler.UserHandler
 }
 
-// Tạo một provider cho config
+// ConfigSet chứa các provider liên quan đến cấu hình
+var ConfigSet = wire.NewSet(
+	LoadConfig,
+	InitHttpServer,
+)
+
+// DatabaseSet chứa các provider liên quan đến database
+var DatabaseSet = wire.NewSet(
+	InitPostgres,
+	InitReplicaPostgres,
+	InitRedis,
+)
+
+// ClientSet chứa các provider liên quan đến HTTP clients
+var ClientSet = wire.NewSet(
+	InitAccountClient,
+	InitConsumerClient, client.NewAccountClient, client.NewConsumerClient,
+)
+
+// RepositorySet chứa các provider liên quan đến repositories
+var RepositorySet = wire.NewSet(repository.NewUserRepo)
+
+// UsecaseSet chứa các provider liên quan đến usecases và facades
+var UsecaseSet = wire.NewSet(validator.NewUserValidator, usecase.NewUserUsecase, facade.NewUserFacade)
+
+// HandlerSet chứa các provider liên quan đến handlers
+var HandlerSet = wire.NewSet(handler.NewUserHandler)
+
+// LoadConfig tạo một provider cho config
 func LoadConfig() (*Config, error) {
 	cfg, err := config.LoadConfig[Config]()
 	if err != nil {
@@ -87,29 +116,32 @@ func LoadConfig() (*Config, error) {
 	return cfg, nil
 }
 
-// Server luôn được khởi tạo từ cấu hình
+// InitHttpServer khởi tạo HTTP server từ cấu hình
 func InitHttpServer(cfg *Config) (server.Server, error) {
 	return server.NewServer(cfg.Server), nil
 }
 
-// Postgres chỉ được khởi tạo nếu có config postgres
+// InitPostgres khởi tạo Postgres nếu có config postgres
 func InitPostgres(cfg *Config) (pkg.MainPostgres, error) {
 	return postgres.NewPostgres(cfg.Postgres)
 }
 
+// InitReplicaPostgres khởi tạo Replica Postgres nếu có config
 func InitReplicaPostgres(cfg *Config) (pkg.ReplicaPostgres, error) {
 	return postgres.NewPostgres(cfg.ReplicaPostgres)
 }
 
-// Redis chỉ được khởi tạo nếu có config redis
+// InitRedis khởi tạo Redis nếu có config redis
 func InitRedis(cfg *Config) (redis.Redis, error) {
 	return redis.NewRedis(cfg.Redis)
 }
 
+// InitAccountClient khởi tạo Account HTTP client
 func InitAccountClient(cfg *Config) pkg.AccountClient {
 	return client2.NewClient(cfg.AccountClient)
 }
 
+// InitConsumerClient khởi tạo Consumer HTTP client
 func InitConsumerClient(cfg *Config) pkg.ConsumerClient {
 	return client2.NewClient(cfg.ConsumerClient)
 }
