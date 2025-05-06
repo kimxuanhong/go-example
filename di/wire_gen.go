@@ -7,6 +7,7 @@
 package di
 
 import (
+	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
@@ -40,7 +41,8 @@ func InitApp() (*App, error) {
 	userRepository := repository.NewUserRepo(mainPostgres, replicaPostgres)
 	accountClient := InitAccountClient(config)
 	consumerClient := InitConsumerClient(config)
-	userUsecase := usecase.NewUserUsecase(userRepository, accountClient, consumerClient)
+	userValidator := validator.NewUserValidator()
+	userUsecase := usecase.NewUserUsecase(userRepository, accountClient, consumerClient, userValidator)
 	userHandler := handler.NewUserHandler(userUsecase)
 	app := &App{
 		Cfg:         config,
