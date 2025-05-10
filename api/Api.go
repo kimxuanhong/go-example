@@ -1,32 +1,31 @@
 package api
 
 import (
+	"github.com/kimxuanhong/go-server/core"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
-	"github.com/kimxuanhong/go-http/server"
 )
 
-func UserRoutes(route *handler.UserHandler) []server.RouteConfig {
-	return []server.RouteConfig{
+func UserRoutes(route *handler.UserHandler) []core.RouteConfig {
+	return []core.RouteConfig{
 		{
 			Path:       "users/:user",
 			Method:     http.MethodGet,
-			HandleFunc: route.GetUser,
-			Middleware: []gin.HandlerFunc{},
+			Handler:    route.GetUser,
+			Middleware: []core.Handler{},
 		},
 		{
 			Path:       "users",
 			Method:     http.MethodPost,
-			HandleFunc: route.CreateUser,
-			Middleware: []gin.HandlerFunc{},
+			Handler:    route.CreateUser,
+			Middleware: []core.Handler{},
 		},
 		{
 			Path:       "users/:user",
 			Method:     http.MethodPut,
-			HandleFunc: route.UpdateUser,
-			Middleware: []gin.HandlerFunc{},
+			Handler:    route.UpdateUser,
+			Middleware: []core.Handler{},
 		},
 	}
 }

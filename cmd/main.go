@@ -1,14 +1,15 @@
 package main
 
 import (
+	"github.com/kimxuanhong/go-example/api"
 	"github.com/kimxuanhong/go-middleware/middleware"
+	"github.com/kimxuanhong/go-server/core"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kimxuanhong/go-example/api"
 	"github.com/kimxuanhong/go-example/di"
 )
 
@@ -19,10 +20,10 @@ func main() {
 	}
 
 	// Đăng ký middleware
-	app.Server.RegisterMiddleware(middleware.RecoveryMiddleware())
-	app.Server.RegisterMiddleware(middleware.LogRequestMiddleware())
-	app.Server.RegisterMiddleware(middleware.LogResponseMiddleware())
-	app.Server.RegisterRoute("GET", "/", Pong())
+	//app.Server.RegisterMiddleware(middleware.RecoveryMiddleware())
+	//app.Server.RegisterMiddleware(middleware.LogRequestMiddleware())
+	//app.Server.RegisterMiddleware(middleware.LogResponseMiddleware())
+	app.Server.Add("GET", "/", Pong())
 	app.Server.Routes(api.UserRoutes(app.UserHandler))
 
 	// Xử lý graceful shutdown
@@ -44,8 +45,8 @@ func main() {
 	middleware.GetMetrics().PrintMetrics()
 }
 
-func Pong() gin.HandlerFunc {
-	return func(c *gin.Context) {
+func Pong() core.Handler {
+	return func(c core.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
 	}
 }

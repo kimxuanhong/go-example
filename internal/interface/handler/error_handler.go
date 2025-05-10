@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"github.com/kimxuanhong/go-server/core"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,7 @@ import (
 )
 
 // HandleError xử lý lỗi một cách thống nhất và trả về response phù hợp
-func HandleError(c *gin.Context, err error) {
+func HandleError(c core.Context, err error) {
 	switch {
 	case errors.Is(err, domainErrors.ErrNotFound):
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

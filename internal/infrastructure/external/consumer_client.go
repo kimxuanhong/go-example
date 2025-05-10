@@ -1,9 +1,8 @@
-package client
+package external
 
 import (
 	"context"
 	"fmt"
-
 	"github.com/kimxuanhong/go-example/internal/domain"
 	"github.com/kimxuanhong/go-example/pkg"
 )

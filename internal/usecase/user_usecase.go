@@ -2,24 +2,23 @@ package usecase
 
 import (
 	"context"
-
 	"github.com/kimxuanhong/go-example/internal/domain"
 	"github.com/kimxuanhong/go-example/internal/domain/errors"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
-	"github.com/kimxuanhong/go-example/internal/infrastructure/client"
+	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 )
 
 type UserUsecase struct {
 	repo           domain.UserRepository
-	accountClient  *client.AccountClient
-	consumerClient *client.ConsumerClient
+	accountClient  *external.AccountClient
+	consumerClient *external.ConsumerClient
 	validator      validator.UserValidator
 }
 
 func NewUserUsecase(
 	repo domain.UserRepository,
-	accountClient *client.AccountClient,
-	consumerClient *client.ConsumerClient,
+	accountClient *external.AccountClient,
+	consumerClient *external.ConsumerClient,
 	validator validator.UserValidator,
 ) *UserUsecase {
 	return &UserUsecase{
@@ -36,7 +35,7 @@ func (uc *UserUsecase) GetUser(ctx context.Context, userName string) (*domain.Us
 	}
 
 	// Kiểm tra user trong account service
-	user, err := uc.accountClient.GetUser(ctx, userName, &client.GetUserOptions{
+	user, err := uc.accountClient.GetUser(ctx, userName, &external.GetUserOptions{
 		Fields: []string{"username"},
 	})
 	if err != nil {
@@ -115,7 +114,7 @@ func (uc *UserUsecase) validateAndCheckExists(ctx context.Context, user *domain.
 
 func (uc *UserUsecase) validateInExternalSystems(ctx context.Context, user *domain.User) error {
 	// Kiểm tra user trong account service
-	existingUser, err := uc.accountClient.GetUser(ctx, user.UserName, &client.GetUserOptions{
+	existingUser, err := uc.accountClient.GetUser(ctx, user.UserName, &external.GetUserOptions{
 		Fields: []string{"username"},
 	})
 	if err != nil {
@@ -126,7 +125,7 @@ func (uc *UserUsecase) validateInExternalSystems(ctx context.Context, user *doma
 	}
 
 	// Kiểm tra thông tin consumer
-	consumerInfo, err := uc.consumerClient.GetConsumerInfo(ctx, user.UserName, &client.GetConsumerInfoOptions{
+	consumerInfo, err := uc.consumerClient.GetConsumerInfo(ctx, user.UserName, &external.GetConsumerInfoOptions{
 		IncludeMetadata: true,
 	})
 	if err != nil {

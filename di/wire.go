@@ -7,30 +7,31 @@ import (
 	"github.com/google/wire"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/facade"
-	infraClient "github.com/kimxuanhong/go-example/internal/infrastructure/client"
+	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
-	httpClient "github.com/kimxuanhong/go-http/client"
-	"github.com/kimxuanhong/go-http/server"
+	"github.com/kimxuanhong/go-http/client"
 	"github.com/kimxuanhong/go-postgres/postgres"
 	"github.com/kimxuanhong/go-redis/redis"
+	"github.com/kimxuanhong/go-server/core"
+	"github.com/kimxuanhong/go-server/fiber"
 	"github.com/kimxuanhong/go-utils/config"
 )
 
 type Config struct {
-	Server          *server.Config     `yaml:"server"`
-	Redis           *redis.Config      `yaml:"redis,omitempty"`
-	Postgres        *postgres.Config   `yaml:"postgres,omitempty"`
-	ReplicaPostgres *postgres.Config   `yaml:"replica_postgres,omitempty"`
-	AccountClient   *httpClient.Config `yaml:"account_client,omitempty"`
-	ConsumerClient  *httpClient.Config `yaml:"consumer_client,omitempty"`
+	Server          *fiber.Config    `yaml:"server"`
+	Redis           *redis.Config    `yaml:"redis,omitempty"`
+	Postgres        *postgres.Config `yaml:"postgres,omitempty"`
+	ReplicaPostgres *postgres.Config `yaml:"replica_postgres,omitempty"`
+	AccountClient   *client.Config   `yaml:"account_client,omitempty"`
+	ConsumerClient  *client.Config   `yaml:"consumer_client,omitempty"`
 }
 
 type App struct {
 	Cfg         *Config
-	Server      server.Server
+	Server      core.Server
 	UserHandler *handler.UserHandler
 }
 
@@ -51,8 +52,8 @@ var DatabaseSet = wire.NewSet(
 var ClientSet = wire.NewSet(
 	InitAccountClient,
 	InitConsumerClient,
-	infraClient.NewAccountClient,
-	infraClient.NewConsumerClient,
+	external.NewAccountClient,
+	external.NewConsumerClient,
 )
 
 // RepositorySet chứa các provider liên quan đến repositories
@@ -95,8 +96,8 @@ func LoadConfig() (*Config, error) {
 }
 
 // InitHttpServer khởi tạo HTTP server từ cấu hình
-func InitHttpServer(cfg *Config) (server.Server, error) {
-	return server.NewServer(cfg.Server), nil
+func InitHttpServer(cfg *Config) (core.Server, error) {
+	return fiber.NewServer(cfg.Server), nil
 }
 
 // InitPostgres khởi tạo Postgres nếu có config postgres
@@ -116,10 +117,10 @@ func InitRedis(cfg *Config) (redis.Redis, error) {
 
 // InitAccountClient khởi tạo Account HTTP client
 func InitAccountClient(cfg *Config) pkg.AccountClient {
-	return httpClient.NewClient(cfg.AccountClient)
+	return client.NewClient(cfg.AccountClient)
 }
 
 // InitConsumerClient khởi tạo Consumer HTTP client
 func InitConsumerClient(cfg *Config) pkg.ConsumerClient {
-	return httpClient.NewClient(cfg.ConsumerClient)
+	return client.NewClient(cfg.ConsumerClient)
 }
