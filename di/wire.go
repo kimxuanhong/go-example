@@ -16,23 +16,17 @@ import (
 	"github.com/kimxuanhong/go-postgres/postgres"
 	"github.com/kimxuanhong/go-redis/redis"
 	"github.com/kimxuanhong/go-server/core"
-	"github.com/kimxuanhong/go-server/fiber"
+	"github.com/kimxuanhong/go-server/gin"
 	"github.com/kimxuanhong/go-utils/config"
 )
 
 type Config struct {
-	Server          *fiber.Config    `yaml:"server"`
+	Server          *gin.Config      `yaml:"server"`
 	Redis           *redis.Config    `yaml:"redis,omitempty"`
 	Postgres        *postgres.Config `yaml:"postgres,omitempty"`
 	ReplicaPostgres *postgres.Config `yaml:"replica_postgres,omitempty"`
 	AccountClient   *client.Config   `yaml:"account_client,omitempty"`
 	ConsumerClient  *client.Config   `yaml:"consumer_client,omitempty"`
-}
-
-type App struct {
-	Cfg         *Config
-	Server      core.Server
-	UserHandler *handler.UserHandler
 }
 
 // ConfigSet chứa các provider liên quan đến cấu hình
@@ -73,6 +67,18 @@ var HandlerSet = wire.NewSet(
 	handler.NewUserHandler,
 )
 
+type Handlers []interface{}
+
+type App struct {
+	Cfg      *Config
+	Server   core.Server
+	Handlers Handlers
+}
+
+func ProvideHandlers(user *handler.UserHandler) Handlers {
+	return Handlers{user}
+}
+
 func InitApp() (*App, error) {
 	wire.Build(
 		ConfigSet,
@@ -81,6 +87,7 @@ func InitApp() (*App, error) {
 		RepositorySet,
 		UsecaseSet,
 		HandlerSet,
+		ProvideHandlers,
 		wire.Struct(new(App), "*"),
 	)
 	return nil, nil
@@ -97,7 +104,7 @@ func LoadConfig() (*Config, error) {
 
 // InitHttpServer khởi tạo HTTP server từ cấu hình
 func InitHttpServer(cfg *Config) (core.Server, error) {
-	return fiber.NewServer(cfg.Server), nil
+	return gin.NewServer(cfg.Server), nil
 }
 
 // InitPostgres khởi tạo Postgres nếu có config postgres

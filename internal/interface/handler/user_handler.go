@@ -16,6 +16,8 @@ func NewUserHandler(userFacade *facade.UserFacade) *UserHandler {
 	return &UserHandler{userFacade}
 }
 
+// GetUser
+// @Api GET /users/:user
 func (h *UserHandler) GetUser(c core.Context) {
 	userName := c.Param("user")
 	user, err := h.userFacade.GetUser(c.Context(), userName)
@@ -27,6 +29,8 @@ func (h *UserHandler) GetUser(c core.Context) {
 	SendResponse(c, http.StatusOK, user)
 }
 
+// CreateUser
+// @Api POST /users
 func (h *UserHandler) CreateUser(c core.Context) {
 	var req dto.UserRequest
 	if !BindAndValidate(c, &req) {
@@ -42,6 +46,8 @@ func (h *UserHandler) CreateUser(c core.Context) {
 	SendResponse(c, http.StatusCreated, createdUser)
 }
 
+// UpdateUser
+// @Api POST /users/:user
 func (h *UserHandler) UpdateUser(c core.Context) {
 	userName := c.Param("user")
 	var req dto.UserRequest

@@ -89,6 +89,10 @@ github.com/kimxuanhong/go-server v1.0.3 h1:+618btbmINY9+BbjSn+SLT4fR4eSlxxNvEI46
 github.com/kimxuanhong/go-server v1.0.3/go.mod h1:c0Q4XolnY2qc28UElYsDiEITSMSYaoVyJBrplJ9m5mI=
 github.com/kimxuanhong/go-server v1.0.5 h1:1WyQKnmmYyj9UapA03JwYZUtDsj0x0AHSClwWkKxhLg=
 github.com/kimxuanhong/go-server v1.0.5/go.mod h1:c0Q4XolnY2qc28UElYsDiEITSMSYaoVyJBrplJ9m5mI=
+github.com/kimxuanhong/go-server v1.0.6 h1:ERrQ9ISTOgMeuHNz4VAKdIsrXnCywbOl7ThfCUfnpmA=
+github.com/kimxuanhong/go-server v1.0.6/go.mod h1:c0Q4XolnY2qc28UElYsDiEITSMSYaoVyJBrplJ9m5mI=
+github.com/kimxuanhong/go-server v1.0.8 h1:XFzR7Tset5+SV5TLRq9GDLJNOsFv2KDnPpWBAvGiMHA=
+github.com/kimxuanhong/go-server v1.0.8/go.mod h1:c0Q4XolnY2qc28UElYsDiEITSMSYaoVyJBrplJ9m5mI=
 github.com/kimxuanhong/go-utils v1.0.3 h1:fNZFwEBt7NNHhu6JtXVK+Ojl3e/VBPnhpzVF8+oMulk=
 github.com/kimxuanhong/go-utils v1.0.3/go.mod h1:PjUwDxTWlailXBuZuQdDCynbkDKEcGLRa665JMahtWE=
 github.com/klauspost/compress v1.17.9 h1:6KIumPrER1LHsvBVuDa0r5xaG0Es51mhhB9BQB2qeMA=

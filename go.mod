@@ -40,7 +40,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kimxuanhong/go-logger v1.0.1 // indirect
 	github.com/kimxuanhong/go-middleware v1.0.3 // indirect
-	github.com/kimxuanhong/go-server v1.0.5 // indirect
+	github.com/kimxuanhong/go-server v1.0.8 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/kr/pretty v0.3.1 // indirect

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/kimxuanhong/go-example/api"
 	"github.com/kimxuanhong/go-middleware/middleware"
 	"github.com/kimxuanhong/go-server/core"
 	"log"
@@ -24,7 +23,7 @@ func main() {
 	//app.Server.RegisterMiddleware(middleware.LogRequestMiddleware())
 	//app.Server.RegisterMiddleware(middleware.LogResponseMiddleware())
 	app.Server.Add("GET", "/", Pong())
-	app.Server.Routes(api.UserRoutes(app.UserHandler))
+	app.Server.SetHandlers(app.Handlers...)
 
 	// Xử lý graceful shutdown
 	sigChan := make(chan os.Signal, 1)

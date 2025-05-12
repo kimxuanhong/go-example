@@ -34,16 +34,16 @@ func (uc *UserUsecase) GetUser(ctx context.Context, userName string) (*domain.Us
 		return nil, errors.NewDomainError("VALIDATION_ERROR", "username is required", errors.ErrValidation)
 	}
 
-	// Kiểm tra user trong account service
-	user, err := uc.accountClient.GetUser(ctx, userName, &external.GetUserOptions{
-		Fields: []string{"username"},
-	})
-	if err != nil {
-		return nil, errors.NewDomainError("EXTERNAL_ERROR", "failed to check user in account service", err)
-	}
-	if user == nil {
-		return nil, errors.NewDomainError("NOT_FOUND", "user not found in account service", errors.ErrNotFound)
-	}
+	//// Kiểm tra user trong account service
+	//user, err := uc.accountClient.GetUser(ctx, userName, &external.GetUserOptions{
+	//	Fields: []string{"username"},
+	//})
+	//if err != nil {
+	//	return nil, errors.NewDomainError("EXTERNAL_ERROR", "failed to check user in account service", err)
+	//}
+	//if user == nil {
+	//	return nil, errors.NewDomainError("NOT_FOUND", "user not found in account service", errors.ErrNotFound)
+	//}
 
 	// Lấy user từ local database
 	localUser, err := uc.repo.GetByUsername(ctx, userName)
