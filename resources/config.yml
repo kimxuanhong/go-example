@@ -3,6 +3,10 @@ server:
   port: 3000
   mode: debug
 
+jwt:
+  secretKey: "Matkhau@1234Nam"
+  expIn: 3600
+
 postgres:
   host: "localhost"
   port: 5432

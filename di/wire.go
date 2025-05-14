@@ -5,6 +5,8 @@ package di
 
 import (
 	"github.com/google/wire"
+	database "github.com/kimxuanhong/go-database/core"
+	postgres "github.com/kimxuanhong/go-database/postgres"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/facade"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
@@ -13,20 +15,21 @@ import (
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
 	"github.com/kimxuanhong/go-http/client"
-	"github.com/kimxuanhong/go-postgres/postgres"
 	"github.com/kimxuanhong/go-redis/redis"
 	"github.com/kimxuanhong/go-server/core"
 	"github.com/kimxuanhong/go-server/gin"
+	"github.com/kimxuanhong/go-server/jwt"
 	"github.com/kimxuanhong/go-utils/config"
 )
 
 type Config struct {
-	Server          *gin.Config      `yaml:"server"`
+	Server          *core.Config     `yaml:"server"`
 	Redis           *redis.Config    `yaml:"redis,omitempty"`
-	Postgres        *postgres.Config `yaml:"postgres,omitempty"`
-	ReplicaPostgres *postgres.Config `yaml:"replica_postgres,omitempty"`
+	Postgres        *database.Config `yaml:"postgres,omitempty"`
+	ReplicaPostgres *database.Config `yaml:"replica_postgres,omitempty"`
 	AccountClient   *client.Config   `yaml:"account_client,omitempty"`
 	ConsumerClient  *client.Config   `yaml:"consumer_client,omitempty"`
+	Jwt             *jwt.Config      `yaml:"jwt,omitempty"`
 }
 
 // ConfigSet chứa các provider liên quan đến cấu hình
@@ -109,12 +112,12 @@ func InitHttpServer(cfg *Config) (core.Server, error) {
 
 // InitPostgres khởi tạo Postgres nếu có config postgres
 func InitPostgres(cfg *Config) (pkg.MainPostgres, error) {
-	return postgres.NewPostgres(cfg.Postgres)
+	return postgres.NewDatabase(cfg.Postgres)
 }
 
 // InitReplicaPostgres khởi tạo Replica Postgres nếu có config
 func InitReplicaPostgres(cfg *Config) (pkg.ReplicaPostgres, error) {
-	return postgres.NewPostgres(cfg.ReplicaPostgres)
+	return postgres.NewDatabase(cfg.ReplicaPostgres)
 }
 
 // InitRedis khởi tạo Redis nếu có config redis

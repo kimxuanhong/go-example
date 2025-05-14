@@ -1,11 +1,11 @@
 package pkg
 
 import (
+	database "github.com/kimxuanhong/go-database/core"
 	"github.com/kimxuanhong/go-http/client"
-	"github.com/kimxuanhong/go-postgres/postgres"
 )
 
-type MainPostgres postgres.Postgres
-type ReplicaPostgres postgres.Postgres
+type MainPostgres database.Database
+type ReplicaPostgres database.Database
 type AccountClient client.Client
 type ConsumerClient client.Client

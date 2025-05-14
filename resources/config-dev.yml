@@ -2,6 +2,11 @@ server:
   host: localhost
   port: 8081
   mode: debug
+  root-path: "/api/v1"
+
+jwt:
+  secretKey: "Matkhau@1234Nam"
+  expIn: 3600
 
 postgres:
   host: "localhost"
