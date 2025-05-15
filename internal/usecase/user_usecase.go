@@ -5,27 +5,20 @@ import (
 	"github.com/kimxuanhong/go-example/internal/domain"
 	"github.com/kimxuanhong/go-example/internal/domain/errors"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
-	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 )
 
 type UserUsecase struct {
-	repo           domain.UserRepository
-	accountClient  *external.AccountClient
-	consumerClient *external.ConsumerClient
-	validator      validator.UserValidator
+	repo      domain.UserRepository
+	validator validator.UserValidator
 }
 
 func NewUserUsecase(
 	repo domain.UserRepository,
-	accountClient *external.AccountClient,
-	consumerClient *external.ConsumerClient,
 	validator validator.UserValidator,
 ) *UserUsecase {
 	return &UserUsecase{
-		repo:           repo,
-		accountClient:  accountClient,
-		consumerClient: consumerClient,
-		validator:      validator,
+		repo:      repo,
+		validator: validator,
 	}
 }
 
@@ -114,26 +107,26 @@ func (uc *UserUsecase) validateAndCheckExists(ctx context.Context, user *domain.
 
 func (uc *UserUsecase) validateInExternalSystems(ctx context.Context, user *domain.User) error {
 	// Kiểm tra user trong account service
-	existingUser, err := uc.accountClient.GetUser(ctx, user.UserName, &external.GetUserOptions{
-		Fields: []string{"username"},
-	})
-	if err != nil {
-		return errors.NewDomainError("EXTERNAL_ERROR", "failed to check user in account service", err)
-	}
-	if existingUser != nil {
-		return errors.NewDomainError("DUPLICATE", "user already exists in account service", errors.ErrValidation)
-	}
-
-	// Kiểm tra thông tin consumer
-	consumerInfo, err := uc.consumerClient.GetConsumerInfo(ctx, user.UserName, &external.GetConsumerInfoOptions{
-		IncludeMetadata: true,
-	})
-	if err != nil {
-		return errors.NewDomainError("EXTERNAL_ERROR", "failed to get consumer info", err)
-	}
-	if consumerInfo != nil && !consumerInfo.IsActive {
-		return errors.NewDomainError("INVALID_STATE", "consumer is not active", errors.ErrValidation)
-	}
+	//existingUser, err := uc.accountClient.GetUser(ctx, user.UserName, &external.GetUserOptions{
+	//	Fields: []string{"username"},
+	//})
+	//if err != nil {
+	//	return errors.NewDomainError("EXTERNAL_ERROR", "failed to check user in account service", err)
+	//}
+	//if existingUser != nil {
+	//	return errors.NewDomainError("DUPLICATE", "user already exists in account service", errors.ErrValidation)
+	//}
+	//
+	//// Kiểm tra thông tin consumer
+	//consumerInfo, err := uc.consumerClient.GetConsumerInfo(ctx, user.UserName, &external.GetConsumerInfoOptions{
+	//	IncludeMetadata: true,
+	//})
+	//if err != nil {
+	//	return errors.NewDomainError("EXTERNAL_ERROR", "failed to get consumer info", err)
+	//}
+	//if consumerInfo != nil && !consumerInfo.IsActive {
+	//	return errors.NewDomainError("INVALID_STATE", "consumer is not active", errors.ErrValidation)
+	//}
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/kimxuanhong/go-server/core"
 	"net/http"
 
@@ -8,6 +9,8 @@ import (
 	"github.com/kimxuanhong/go-example/internal/interface/dto"
 )
 
+// UserHandler
+// @BaseUrl /users
 type UserHandler struct {
 	userFacade *facade.UserFacade
 }
@@ -17,9 +20,11 @@ func NewUserHandler(userFacade *facade.UserFacade) *UserHandler {
 }
 
 // GetUser
-// @Api GET /users/:user
+// @Api GET /:user
 func (h *UserHandler) GetUser(c core.Context) {
 	userName := c.Param("user")
+	id := c.Query("id")
+	fmt.Println("id= " + id)
 	user, err := h.userFacade.GetUser(c.Context(), userName)
 	if err != nil {
 		HandleError(c, err)
@@ -30,7 +35,7 @@ func (h *UserHandler) GetUser(c core.Context) {
 }
 
 // CreateUser
-// @Api POST /users
+// @Api POST /
 func (h *UserHandler) CreateUser(c core.Context) {
 	var req dto.UserRequest
 	if !BindAndValidate(c, &req) {
@@ -47,7 +52,7 @@ func (h *UserHandler) CreateUser(c core.Context) {
 }
 
 // UpdateUser
-// @Api POST /users/:user
+// @Api POST /:user
 func (h *UserHandler) UpdateUser(c core.Context) {
 	userName := c.Param("user")
 	var req dto.UserRequest

@@ -52,3 +52,7 @@ consumer_client:
   headers:
     Authorization: Bearer your-token
     Content-Type: application/json
+
+cron:
+  link-account: "*/30 * * * * *"
+  notify: "*/5 * * * * *"

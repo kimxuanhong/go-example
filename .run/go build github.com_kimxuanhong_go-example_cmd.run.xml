@@ -3,7 +3,7 @@
     <module name="go-example" />
     <working_directory value="$PROJECT_DIR$" />
     <envs>
-      <env name="CONFIG" value="config-dev.yml" />
+      <env name="APP_ENV" value="dev" />
     </envs>
     <kind value="PACKAGE" />
     <package value="github.com/kimxuanhong/go-example/cmd" />

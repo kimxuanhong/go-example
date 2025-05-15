@@ -2,9 +2,9 @@ package main
 
 import (
 	"errors"
+	"github.com/kimxuanhong/go-cron/cron"
 	"github.com/kimxuanhong/go-middleware/middleware"
 	"github.com/kimxuanhong/go-server/core"
-	"github.com/kimxuanhong/go-server/jwt"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +15,24 @@ import (
 	"github.com/kimxuanhong/go-example/di"
 )
 
+type MyHandler struct{}
+
+// LinkAccount
+// Giây     Phút     Giờ     Ngày     Tháng     Thứ
+// */30      *        *       *         *        *
+// @Cron cron.link-account
+func (m *MyHandler) LinkAccount() {
+	println("run cron cron.link-account")
+}
+
+// Notify
+// Giây     Phút     Giờ     Ngày     Tháng     Thứ
+// */30      *        *       *         *        *
+// @Cron cron.notify
+func (m *MyHandler) Notify() {
+	println("run cron cron.notify")
+}
+
 func main() {
 	app, err := di.InitApp()
 	if err != nil {
@@ -22,13 +40,15 @@ func main() {
 	}
 
 	// Đăng ký middleware
-	//app.Server.RegisterMiddleware(middleware.RecoveryMiddleware())
-	//app.Server.RegisterMiddleware(middleware.LogRequestMiddleware())
-	jwtComp := jwt.NewJwt(app.Cfg.Jwt)
-	app.Server.Use(jwt.AuthMiddleware(jwtComp))
-	app.Server.Add("GET", "/", Pong())
-	app.Server.SetHandlers(app.Handlers...)
+	//jwtComp := jwt.NewJwt(app.Cfg.Jwt)
+	//app.Server.Use(jwt.AuthMiddleware(jwtComp))
+	app.Server.RegisterHandlersWithTags(app.Handlers...)
 	app.Server.HealthCheck()
+
+	scheduler := cron.NewCronJob()
+	defer scheduler.Stop()
+	scheduler.RegisterJobWithTags(&MyHandler{})
+	_ = scheduler.Start()
 
 	// Xử lý graceful shutdown
 	sigChan := make(chan os.Signal, 1)
