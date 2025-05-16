@@ -2,16 +2,18 @@ package external
 
 import (
 	"context"
-	"fmt"
 	"github.com/kimxuanhong/go-example/internal/domain"
-	"github.com/kimxuanhong/go-example/pkg"
 )
 
-type ConsumerClient struct {
-	client pkg.ConsumerClient
+type FeignConsumerClient struct {
+	GetConsumer func(ctx context.Context, username, include_metadata, source string) (*consumerInfoResponse, error) `feign:"@GET /consumers/{username} | @Path username | @Query include_metadata | @Query source"`
 }
 
-func NewConsumerClient(client pkg.ConsumerClient) *ConsumerClient {
+type ConsumerClient struct {
+	client *FeignConsumerClient
+}
+
+func NewConsumerClient(client *FeignConsumerClient) *ConsumerClient {
 	return &ConsumerClient{
 		client: client,
 	}
@@ -31,23 +33,10 @@ type consumerInfoResponse struct {
 
 // GetConsumerInfo lấy thông tin consumer từ consumer service
 func (c *ConsumerClient) GetConsumerInfo(ctx context.Context, userName string, opts *GetConsumerInfoOptions) (*domain.ConsumerInfo, error) {
-	// Xây dựng path với query params
-	path := fmt.Sprintf("/consumers/%s", userName)
-	if opts != nil {
-		if opts.IncludeMetadata {
-			path += "?include_metadata=true"
-		}
-		if opts.Source != "" {
-			path += fmt.Sprintf("&source=%s", opts.Source)
-		}
-	}
-
-	// Gọi API thông qua base client
-	var resp consumerInfoResponse
-	if err := c.client.Get(ctx, path, &resp); err != nil {
+	resp, err := c.client.GetConsumer(ctx, userName, "true", opts.Source)
+	if err != nil {
 		return nil, err
 	}
-
 	// Transform response data sang domain model
 	consumerInfo := &domain.ConsumerInfo{
 		ID:       resp.ID,

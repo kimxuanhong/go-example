@@ -17,6 +17,7 @@ import (
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
+	"github.com/kimxuanhong/go-feign/feign"
 	"github.com/kimxuanhong/go-server/core"
 	"github.com/kimxuanhong/go-server/jwt"
 	"github.com/kimxuanhong/go-server/server"
@@ -46,7 +47,10 @@ func InitApp() (*App, error) {
 	userValidator := validator.NewUserValidator()
 	userUsecase := usecase.NewUserUsecase(userRepository, userValidator)
 	userFacade := facade.NewUserFacade(userUsecase)
-	accountClient := external.NewAccountClient()
+	accountClient, err := InitAccountClient(config)
+	if err != nil {
+		return nil, err
+	}
 	userHandler := handler.NewUserHandler(userFacade, accountClient)
 	handlers := ProvideHandlers(userHandler)
 	app := &App{
@@ -60,10 +64,11 @@ func InitApp() (*App, error) {
 // wire.go:
 
 type Config struct {
-	Server          *core.Config  `mapstructure:"server"`
-	Postgres        *core2.Config `mapstructure:"postgres,omitempty"`
-	ReplicaPostgres *core2.Config `mapstructure:"replica_postgres,omitempty"`
-	Jwt             *jwt.Config   `mapstructure:"jwt,omitempty"`
+	Server              *core.Config  `mapstructure:"server"`
+	Postgres            *core2.Config `mapstructure:"postgres,omitempty"`
+	ReplicaPostgres     *core2.Config `mapstructure:"replica_postgres,omitempty"`
+	Jwt                 *jwt.Config   `mapstructure:"jwt,omitempty"`
+	AccountClientConfig *feign.Config `mapstructure:"consumer_client,omitempty"`
 }
 
 // ConfigSet chứa các provider liên quan đến cấu hình
@@ -121,4 +126,9 @@ func InitPostgres(cfg *Config) (pkg.MainPostgres, error) {
 // InitReplicaPostgres khởi tạo Replica Postgres nếu có config
 func InitReplicaPostgres(cfg *Config) (pkg.ReplicaPostgres, error) {
 	return database.NewDatabase(cfg.ReplicaPostgres)
+}
+
+// InitReplicaPostgres khởi tạo Replica Postgres nếu có config
+func InitAccountClient(cfg *Config) (*external.AccountClient, error) {
+	return external.NewAccountClient(cfg.AccountClientConfig), nil
 }

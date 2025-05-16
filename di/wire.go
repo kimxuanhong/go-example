@@ -14,6 +14,7 @@ import (
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
+	"github.com/kimxuanhong/go-feign/feign"
 	"github.com/kimxuanhong/go-server/core"
 	"github.com/kimxuanhong/go-server/jwt"
 	"github.com/kimxuanhong/go-server/server"
@@ -21,10 +22,11 @@ import (
 )
 
 type Config struct {
-	Server          *core.Config   `mapstructure:"server"`
-	Postgres        *dbCore.Config `mapstructure:"postgres,omitempty"`
-	ReplicaPostgres *dbCore.Config `mapstructure:"replica_postgres,omitempty"`
-	Jwt             *jwt.Config    `mapstructure:"jwt,omitempty"`
+	Server              *core.Config   `mapstructure:"server"`
+	Postgres            *dbCore.Config `mapstructure:"postgres,omitempty"`
+	ReplicaPostgres     *dbCore.Config `mapstructure:"replica_postgres,omitempty"`
+	Jwt                 *jwt.Config    `mapstructure:"jwt,omitempty"`
+	AccountClientConfig *feign.Config  `mapstructure:"consumer_client,omitempty"`
 }
 
 // ConfigSet chứa các provider liên quan đến cấu hình
@@ -74,7 +76,7 @@ func InitApp() (*App, error) {
 		DatabaseSet,
 		RepositorySet,
 		UsecaseSet,
-		external.NewAccountClient,
+		InitAccountClient,
 		HandlerSet,
 		ProvideHandlers,
 		wire.Struct(new(App), "*"),
@@ -104,4 +106,9 @@ func InitPostgres(cfg *Config) (pkg.MainPostgres, error) {
 // InitReplicaPostgres khởi tạo Replica Postgres nếu có config
 func InitReplicaPostgres(cfg *Config) (pkg.ReplicaPostgres, error) {
 	return db.NewDatabase(cfg.ReplicaPostgres)
+}
+
+// InitReplicaPostgres khởi tạo Replica Postgres nếu có config
+func InitAccountClient(cfg *Config) (*external.AccountClient, error) {
+	return external.NewAccountClient(cfg.AccountClientConfig), nil
 }

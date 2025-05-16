@@ -44,7 +44,7 @@ func (h *UserHandler) CreateUser(c core.Context) {
 		return
 	}
 
-	user, err := h.accountClient.GetUser(req.UserName, req.Email)
+	user, err := h.accountClient.GetUser(c.Context(), req.UserName, req.Email)
 	fmt.Println(user, err)
 
 	createdUser, err := h.userFacade.CreateUser(c.Context(), &req)

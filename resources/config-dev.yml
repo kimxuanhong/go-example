@@ -40,7 +40,7 @@ redis:
   database: 0
 
 account_client:
-  base_url: https://api.example.com
+  url: http://localhost:8081/api/v1
   timeout: 10s
   retry_count: 3
   retry_wait: 2s
@@ -49,7 +49,7 @@ account_client:
     Content-Type: application/json
 
 consumer_client:
-  base_url: https://api.example.com
+  url: http://localhost:8081/api/v1
   timeout: 10s
   retry_count: 3
   retry_wait: 2s

@@ -1,14 +1,16 @@
 package external
 
-import "github.com/kimxuanhong/go-feign/feign"
+import (
+	"context"
+	"github.com/kimxuanhong/go-feign/feign"
+)
 
 type AccountClient struct {
-	_       struct{}                                           `feign:"@Url http://localhost:8081/api/v1"`
-	GetUser func(id string, username string) (*UserRes, error) `feign:"@GET /users/{id} | @Path id | @Query username"`
+	GetUser func(ctx context.Context, id string, username string) (*UserRes, error) `feign:"@GET /users/{id} | @Path id | @Query username"`
 }
 
-func NewAccountClient() *AccountClient {
-	client := feign.NewClient()
+func NewAccountClient(config *feign.Config) *AccountClient {
+	client := feign.NewClient(config)
 	accountClient := &AccountClient{}
 	client.Create(accountClient)
 	return accountClient
