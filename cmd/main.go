@@ -20,7 +20,7 @@ type MyHandler struct{}
 // LinkAccount
 // Giây     Phút     Giờ     Ngày     Tháng     Thứ
 // */30      *        *       *         *        *
-// @Cron cron.link-account
+// //@Cron cron.link-account
 func (m *MyHandler) LinkAccount() {
 	println("run cron cron.link-account")
 }
@@ -28,7 +28,7 @@ func (m *MyHandler) LinkAccount() {
 // Notify
 // Giây     Phút     Giờ     Ngày     Tháng     Thứ
 // */30      *        *       *         *        *
-// @Cron cron.notify
+// //@Cron cron.notify
 func (m *MyHandler) Notify() {
 	println("run cron cron.notify")
 }

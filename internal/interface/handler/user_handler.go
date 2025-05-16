@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 	"github.com/kimxuanhong/go-server/core"
 	"net/http"
 
@@ -12,11 +13,12 @@ import (
 // UserHandler
 // @BaseUrl /users
 type UserHandler struct {
-	userFacade *facade.UserFacade
+	userFacade    *facade.UserFacade
+	accountClient *external.AccountClient
 }
 
-func NewUserHandler(userFacade *facade.UserFacade) *UserHandler {
-	return &UserHandler{userFacade}
+func NewUserHandler(userFacade *facade.UserFacade, accountClient *external.AccountClient) *UserHandler {
+	return &UserHandler{userFacade, accountClient}
 }
 
 // GetUser
@@ -41,6 +43,9 @@ func (h *UserHandler) CreateUser(c core.Context) {
 	if !BindAndValidate(c, &req) {
 		return
 	}
+
+	user, err := h.accountClient.GetUser(req.UserName, req.Email)
+	fmt.Println(user, err)
 
 	createdUser, err := h.userFacade.CreateUser(c.Context(), &req)
 	if err != nil {

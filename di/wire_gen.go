@@ -12,6 +12,7 @@ import (
 	"github.com/kimxuanhong/go-database/database"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/facade"
+	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
@@ -45,7 +46,8 @@ func InitApp() (*App, error) {
 	userValidator := validator.NewUserValidator()
 	userUsecase := usecase.NewUserUsecase(userRepository, userValidator)
 	userFacade := facade.NewUserFacade(userUsecase)
-	userHandler := handler.NewUserHandler(userFacade)
+	accountClient := external.NewAccountClient()
+	userHandler := handler.NewUserHandler(userFacade, accountClient)
 	handlers := ProvideHandlers(userHandler)
 	app := &App{
 		Cfg:      config,
@@ -108,7 +110,7 @@ func LoadConfig() (*Config, error) {
 
 // InitHttpServer khởi tạo HTTP server từ cấu hình
 func InitHttpServer(cfg *Config) (core.Server, error) {
-	return server.NewServer(), nil
+	return server.NewServer(cfg.Server), nil
 }
 
 // InitPostgres khởi tạo Postgres nếu có config postgres

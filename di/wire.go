@@ -9,6 +9,7 @@ import (
 	db "github.com/kimxuanhong/go-database/database"
 	"github.com/kimxuanhong/go-example/internal/domain/validator"
 	"github.com/kimxuanhong/go-example/internal/facade"
+	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
 	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
@@ -73,6 +74,7 @@ func InitApp() (*App, error) {
 		DatabaseSet,
 		RepositorySet,
 		UsecaseSet,
+		external.NewAccountClient,
 		HandlerSet,
 		ProvideHandlers,
 		wire.Struct(new(App), "*"),
