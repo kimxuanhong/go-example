@@ -26,7 +26,7 @@ type Config struct {
 	Postgres            *dbCore.Config `mapstructure:"postgres,omitempty"`
 	ReplicaPostgres     *dbCore.Config `mapstructure:"replica_postgres,omitempty"`
 	Jwt                 *jwt.Config    `mapstructure:"jwt,omitempty"`
-	AccountClientConfig *feign.Config  `mapstructure:"consumer_client,omitempty"`
+	AccountClientConfig *feign.Config  `mapstructure:"account_client,omitempty"`
 }
 
 // ConfigSet chứa các provider liên quan đến cấu hình

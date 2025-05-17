@@ -6,6 +6,7 @@ import (
 )
 
 type AccountClient struct {
+	_       struct{}                                                                `feign:"@Url account_client.url"`
 	GetUser func(ctx context.Context, id string, username string) (*UserRes, error) `feign:"@GET /users/{id} | @Path id | @Query username"`
 }
 

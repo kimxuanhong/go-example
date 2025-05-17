@@ -68,7 +68,7 @@ type Config struct {
 	Postgres            *core2.Config `mapstructure:"postgres,omitempty"`
 	ReplicaPostgres     *core2.Config `mapstructure:"replica_postgres,omitempty"`
 	Jwt                 *jwt.Config   `mapstructure:"jwt,omitempty"`
-	AccountClientConfig *feign.Config `mapstructure:"consumer_client,omitempty"`
+	AccountClientConfig *feign.Config `mapstructure:"account_client,omitempty"`
 }
 
 // ConfigSet chứa các provider liên quan đến cấu hình

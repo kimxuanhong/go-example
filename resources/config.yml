@@ -40,6 +40,7 @@ account_client:
   timeout: 10s
   retry_count: 3
   retry_wait: 2s
+  debug: true
   headers:
     Authorization: Bearer your-token
     Content-Type: application/json

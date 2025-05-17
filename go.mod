@@ -9,7 +9,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/kimxuanhong/go-cron v1.0.5
 	github.com/kimxuanhong/go-database v1.0.3
-	github.com/kimxuanhong/go-feign v1.0.7
+	github.com/kimxuanhong/go-feign v1.0.9
 	github.com/kimxuanhong/go-http v1.0.4
 	github.com/kimxuanhong/go-middleware v1.0.3
 	github.com/kimxuanhong/go-server v1.0.16
