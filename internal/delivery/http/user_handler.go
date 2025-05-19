@@ -1,4 +1,4 @@
-package handler
+package http
 
 import (
 	"fmt"
@@ -6,12 +6,12 @@ import (
 	"github.com/kimxuanhong/go-server/core"
 	"net/http"
 
+	"github.com/kimxuanhong/go-example/internal/delivery/dto"
 	"github.com/kimxuanhong/go-example/internal/facade"
-	"github.com/kimxuanhong/go-example/internal/interface/dto"
 )
 
 // UserHandler
-// @BaseUrl /users
+// @BaseUrl /v1
 type UserHandler struct {
 	userFacade    *facade.UserFacade
 	accountClient *external.AccountClient
@@ -22,7 +22,7 @@ func NewUserHandler(userFacade *facade.UserFacade, accountClient *external.Accou
 }
 
 // GetUser
-// @Api GET /:user
+// @Api GET /users/:user
 func (h *UserHandler) GetUser(c core.Context) {
 	userName := c.Param("user")
 	id := c.Query("id")
@@ -37,7 +37,7 @@ func (h *UserHandler) GetUser(c core.Context) {
 }
 
 // CreateUser
-// @Api POST /
+// @Api POST /users
 func (h *UserHandler) CreateUser(c core.Context) {
 	var req dto.UserRequest
 	if !BindAndValidate(c, &req) {
@@ -57,7 +57,7 @@ func (h *UserHandler) CreateUser(c core.Context) {
 }
 
 // UpdateUser
-// @Api POST /:user
+// @Api POST /users/:user
 func (h *UserHandler) UpdateUser(c core.Context) {
 	userName := c.Param("user")
 	var req dto.UserRequest

@@ -1,4 +1,4 @@
-package validator
+package rules
 
 import (
 	"github.com/kimxuanhong/go-example/internal/domain"

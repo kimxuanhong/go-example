@@ -2,7 +2,7 @@ server:
   host: localhost
   port: 8081
   mode: debug
-  root-path: "/api/v1"
+  root-path: "/api"
   engine: "gin"
 
 jwt:

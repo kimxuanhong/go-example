@@ -3,7 +3,7 @@ package facade
 import (
 	"context"
 
-	"github.com/kimxuanhong/go-example/internal/interface/dto"
+	"github.com/kimxuanhong/go-example/internal/delivery/dto"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 )
 

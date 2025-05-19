@@ -7,11 +7,11 @@ import (
 	"github.com/google/wire"
 	dbCore "github.com/kimxuanhong/go-database/core"
 	db "github.com/kimxuanhong/go-database/database"
-	"github.com/kimxuanhong/go-example/internal/domain/validator"
+	"github.com/kimxuanhong/go-example/internal/delivery/http"
+	"github.com/kimxuanhong/go-example/internal/domain/rules"
 	"github.com/kimxuanhong/go-example/internal/facade"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
-	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
 	"github.com/kimxuanhong/go-feign/feign"
@@ -48,14 +48,14 @@ var RepositorySet = wire.NewSet(
 
 // UsecaseSet chứa các provider liên quan đến usecases và facades
 var UsecaseSet = wire.NewSet(
-	validator.NewUserValidator,
+	rules.NewUserValidator,
 	usecase.NewUserUsecase,
 	facade.NewUserFacade,
 )
 
 // HandlerSet chứa các provider liên quan đến handlers
 var HandlerSet = wire.NewSet(
-	handler.NewUserHandler,
+	http.NewUserHandler,
 )
 
 type Handlers []interface{}
@@ -66,7 +66,7 @@ type App struct {
 	Handlers Handlers
 }
 
-func ProvideHandlers(user *handler.UserHandler) Handlers {
+func ProvideHandlers(user *http.UserHandler) Handlers {
 	return Handlers{user}
 }
 

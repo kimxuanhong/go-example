@@ -4,17 +4,17 @@ import (
 	"context"
 	"github.com/kimxuanhong/go-example/internal/domain"
 	"github.com/kimxuanhong/go-example/internal/domain/errors"
-	"github.com/kimxuanhong/go-example/internal/domain/validator"
+	"github.com/kimxuanhong/go-example/internal/domain/rules"
 )
 
 type UserUsecase struct {
 	repo      domain.UserRepository
-	validator validator.UserValidator
+	validator rules.UserValidator
 }
 
 func NewUserUsecase(
 	repo domain.UserRepository,
-	validator validator.UserValidator,
+	validator rules.UserValidator,
 ) *UserUsecase {
 	return &UserUsecase{
 		repo:      repo,

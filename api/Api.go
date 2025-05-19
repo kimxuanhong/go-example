@@ -2,28 +2,27 @@ package api
 
 import (
 	"github.com/kimxuanhong/go-server/core"
-	"net/http"
 
-	"github.com/kimxuanhong/go-example/internal/interface/handler"
+	"github.com/kimxuanhong/go-example/internal/delivery/http"
 )
 
-func UserRoutes(route *handler.UserHandler) []core.RouteConfig {
+func UserRoutes(route *http.UserHandler) []core.RouteConfig {
 	return []core.RouteConfig{
 		{
 			Path:       "users/:user",
-			Method:     http.MethodGet,
+			Method:     core.MethodGet,
 			Handler:    route.GetUser,
 			Middleware: []core.Handler{},
 		},
 		{
 			Path:       "users",
-			Method:     http.MethodPost,
+			Method:     core.MethodPost,
 			Handler:    route.CreateUser,
 			Middleware: []core.Handler{},
 		},
 		{
 			Path:       "users/:user",
-			Method:     http.MethodPut,
+			Method:     core.MethodPut,
 			Handler:    route.UpdateUser,
 			Middleware: []core.Handler{},
 		},

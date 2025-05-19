@@ -1,4 +1,4 @@
-package handler
+package http
 
 import (
 	"github.com/kimxuanhong/go-server/core"

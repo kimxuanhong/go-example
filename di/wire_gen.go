@@ -10,11 +10,11 @@ import (
 	"github.com/google/wire"
 	core2 "github.com/kimxuanhong/go-database/core"
 	"github.com/kimxuanhong/go-database/database"
-	"github.com/kimxuanhong/go-example/internal/domain/validator"
+	"github.com/kimxuanhong/go-example/internal/delivery/http"
+	"github.com/kimxuanhong/go-example/internal/domain/rules"
 	"github.com/kimxuanhong/go-example/internal/facade"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/repository"
-	"github.com/kimxuanhong/go-example/internal/interface/handler"
 	"github.com/kimxuanhong/go-example/internal/usecase"
 	"github.com/kimxuanhong/go-example/pkg"
 	"github.com/kimxuanhong/go-feign/feign"
@@ -44,14 +44,14 @@ func InitApp() (*App, error) {
 		return nil, err
 	}
 	userRepository := repository.NewUserRepo(mainPostgres, replicaPostgres)
-	userValidator := validator.NewUserValidator()
+	userValidator := rules.NewUserValidator()
 	userUsecase := usecase.NewUserUsecase(userRepository, userValidator)
 	userFacade := facade.NewUserFacade(userUsecase)
 	accountClient, err := InitAccountClient(config)
 	if err != nil {
 		return nil, err
 	}
-	userHandler := handler.NewUserHandler(userFacade, accountClient)
+	userHandler := http.NewUserHandler(userFacade, accountClient)
 	handlers := ProvideHandlers(userHandler)
 	app := &App{
 		Cfg:      config,
@@ -87,10 +87,10 @@ var DatabaseSet = wire.NewSet(
 var RepositorySet = wire.NewSet(repository.NewUserRepo)
 
 // UsecaseSet chứa các provider liên quan đến usecases và facades
-var UsecaseSet = wire.NewSet(validator.NewUserValidator, usecase.NewUserUsecase, facade.NewUserFacade)
+var UsecaseSet = wire.NewSet(rules.NewUserValidator, usecase.NewUserUsecase, facade.NewUserFacade)
 
 // HandlerSet chứa các provider liên quan đến handlers
-var HandlerSet = wire.NewSet(handler.NewUserHandler)
+var HandlerSet = wire.NewSet(http.NewUserHandler)
 
 type Handlers []interface{}
 
@@ -100,7 +100,7 @@ type App struct {
 	Handlers Handlers
 }
 
-func ProvideHandlers(user *handler.UserHandler) Handlers {
+func ProvideHandlers(user *http.UserHandler) Handlers {
 	return Handlers{user}
 }
 
