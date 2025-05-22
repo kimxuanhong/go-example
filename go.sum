@@ -73,6 +73,8 @@ github.com/kimxuanhong/go-database v1.0.3 h1:nTblXod3yzKP9/BhyvSNDW96iG51ia5H9Kc
 github.com/kimxuanhong/go-database v1.0.3/go.mod h1:aLc6FCX4Zdd++1y3ka3bsOJY0X1lC+zCB6lSpUUsCaQ=
 github.com/kimxuanhong/go-feign v1.0.9 h1:mhAGLaH14ZFNhWg14jRUe5xuyk0orQIoMniQA5jsr3g=
 github.com/kimxuanhong/go-feign v1.0.9/go.mod h1:Kq5kq5JIa7yIvNAeodilJT0sXYA/SOcEfGg9d/BP68Q=
+github.com/kimxuanhong/go-feign v1.0.10 h1:y6npoIjh286NT0bGnYz/NU1jj32m14Yfkbhx2cN3rvE=
+github.com/kimxuanhong/go-feign v1.0.10/go.mod h1:Kq5kq5JIa7yIvNAeodilJT0sXYA/SOcEfGg9d/BP68Q=
 github.com/kimxuanhong/go-http v1.0.4 h1:fk1p821dC0BLvMqGlqeXmM9CN88zrrENMJlTEWFgAnY=
 github.com/kimxuanhong/go-http v1.0.4/go.mod h1:Qs0WmB/HJ+LXpKAsWYHZXio+sdaAgOtWL0tol4WJ+O0=
 github.com/kimxuanhong/go-logger v1.0.1 h1:CDv05i5bnlf+84YVJVVzKrtFAHXcG3S/tezPqOn184M=
