@@ -48,14 +48,14 @@ func (uc *UserUsecase) GetUser(ctx context.Context, userName string) (*domain.Us
 }
 
 func (uc *UserUsecase) CreateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
-	if err := uc.validateAndCheckDuplicate(ctx, user); err != nil {
-		return nil, err
-	}
-
-	// Validate trong external systems
-	if err := uc.validateInExternalSystems(ctx, user); err != nil {
-		return nil, err
-	}
+	//if err := uc.validateAndCheckDuplicate(ctx, user); err != nil {
+	//	return nil, err
+	//}
+	//
+	//// Validate trong external systems
+	//if err := uc.validateInExternalSystems(ctx, user); err != nil {
+	//	return nil, err
+	//}
 
 	createdUser, err := uc.repo.Store(ctx, user)
 	if err != nil {

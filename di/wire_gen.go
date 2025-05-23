@@ -8,8 +8,7 @@ package di
 
 import (
 	"github.com/google/wire"
-	core2 "github.com/kimxuanhong/go-database/core"
-	"github.com/kimxuanhong/go-database/database"
+	"github.com/kimxuanhong/go-database/db"
 	"github.com/kimxuanhong/go-example/internal/delivery/http"
 	"github.com/kimxuanhong/go-example/internal/domain/rules"
 	"github.com/kimxuanhong/go-example/internal/facade"
@@ -65,8 +64,8 @@ func InitApp() (*App, error) {
 
 type Config struct {
 	Server              *core.Config  `mapstructure:"server"`
-	Postgres            *core2.Config `mapstructure:"postgres,omitempty"`
-	ReplicaPostgres     *core2.Config `mapstructure:"replica_postgres,omitempty"`
+	Postgres            *db.Config    `mapstructure:"postgres,omitempty"`
+	ReplicaPostgres     *db.Config    `mapstructure:"replica_postgres,omitempty"`
 	Jwt                 *jwt.Config   `mapstructure:"jwt,omitempty"`
 	AccountClientConfig *feign.Config `mapstructure:"account_client,omitempty"`
 }
@@ -120,12 +119,12 @@ func InitHttpServer(cfg *Config) (core.Server, error) {
 
 // InitPostgres khởi tạo Postgres nếu có config postgres
 func InitPostgres(cfg *Config) (pkg.MainPostgres, error) {
-	return database.NewDatabase(cfg.Postgres)
+	return db.Open(cfg.Postgres)
 }
 
 // InitReplicaPostgres khởi tạo Replica Postgres nếu có config
 func InitReplicaPostgres(cfg *Config) (pkg.ReplicaPostgres, error) {
-	return database.NewDatabase(cfg.ReplicaPostgres)
+	return db.Open(cfg.ReplicaPostgres)
 }
 
 // InitReplicaPostgres khởi tạo Replica Postgres nếu có config

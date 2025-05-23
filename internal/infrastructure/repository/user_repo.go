@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"github.com/google/uuid"
+	"github.com/kimxuanhong/go-database/repo"
 	"time"
 
 	"github.com/kimxuanhong/go-example/internal/domain"
@@ -14,18 +16,20 @@ const (
 )
 
 type userRepo struct {
-	db    pkg.MainPostgres
-	repDB pkg.ReplicaPostgres
+	db    *repo.Repository[UserModel, string]
+	repDB *repo.Repository[UserModel, string]
 }
 
 func NewUserRepo(db pkg.MainPostgres, repDB pkg.ReplicaPostgres) domain.UserRepository {
-	return &userRepo{db, repDB}
+	return &userRepo{
+		db:    repo.NewRepository[UserModel, string](db),
+		repDB: repo.NewRepository[UserModel, string](repDB),
+	}
 }
 
 func (r *userRepo) GetByUsername(ctx context.Context, userName string) (*domain.User, error) {
-
-	var user UserModel
-	if err := r.db.SelectOne(ctx, &user, "user_name = ?", userName); err != nil {
+	user, err := r.db.FindByID(ctx, "78c83478-5e15-4720-9acb-b70ab32f011b")
+	if err != nil {
 		return nil, err
 	}
 
@@ -44,7 +48,12 @@ func (r *userRepo) GetByUsername(ctx context.Context, userName string) (*domain.
 }
 
 func (r *userRepo) Store(ctx context.Context, user *domain.User) (*domain.User, error) {
-	if err := r.repDB.Insert(ctx, user); err != nil {
+	userModel := &UserModel{
+		ID:       uuid.NewString(),
+		UserName: user.UserName,
+	}
+
+	if err := r.repDB.Insert(ctx, userModel); err != nil {
 		return nil, err
 	}
 
