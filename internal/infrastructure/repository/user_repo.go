@@ -15,20 +15,34 @@ const (
 	userCacheDuration  = 3 * time.Minute
 )
 
+type UserRepository struct {
+	*repo.Repository[UserModel, string]
+	FindByUserName func(ctx context.Context, username string) (*UserModel, error) `repo:"@Query"`
+}
+
 type userRepo struct {
-	db    *repo.Repository[UserModel, string]
-	repDB *repo.Repository[UserModel, string]
+	db    *UserRepository
+	repDB *UserRepository
 }
 
 func NewUserRepo(db pkg.MainPostgres, repDB pkg.ReplicaPostgres) domain.UserRepository {
+	repositoryMain := repo.NewRepository[UserModel, string](db)
+	userRepoMain := &UserRepository{Repository: repositoryMain}
+	err := repositoryMain.FillFuncFields(userRepoMain)
+	if err != nil {
+		panic(err)
+	}
+
 	return &userRepo{
-		db:    repo.NewRepository[UserModel, string](db),
-		repDB: repo.NewRepository[UserModel, string](repDB),
+		db: userRepoMain,
+		repDB: &UserRepository{
+			Repository: repo.NewRepository[UserModel, string](repDB),
+		},
 	}
 }
 
 func (r *userRepo) GetByUsername(ctx context.Context, userName string) (*domain.User, error) {
-	user, err := r.db.FindByID(ctx, "78c83478-5e15-4720-9acb-b70ab32f011b")
+	user, err := r.db.FindByUserName(ctx, userName)
 	if err != nil {
 		return nil, err
 	}
