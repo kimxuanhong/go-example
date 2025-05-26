@@ -42,6 +42,11 @@ func NewUserRepo(db pkg.MainPostgres, repDB pkg.ReplicaPostgres) domain.UserRepo
 }
 
 func (r *userRepo) GetByUsername(ctx context.Context, userName string) (*domain.User, error) {
+
+	_, err := r.db.Exists(ctx, "user_name = ?", userName)
+	if err != nil {
+		return nil, err
+	}
 	user, err := r.db.FindByUserName(ctx, userName)
 	if err != nil {
 		return nil, err

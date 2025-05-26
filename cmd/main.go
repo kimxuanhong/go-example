@@ -2,8 +2,9 @@ package main
 
 import (
 	"errors"
+	"github.com/google/uuid"
 	"github.com/kimxuanhong/go-cron/cron"
-	"github.com/kimxuanhong/go-middleware/middleware"
+	"github.com/kimxuanhong/go-logger/logger"
 	"github.com/kimxuanhong/go-server/core"
 	"log"
 	"net/http"
@@ -34,6 +35,11 @@ func (m *MyHandler) Notify() {
 }
 
 func main() {
+	err := logger.Init()
+	if err != nil {
+		log.Fatalf("failed to init logger: %v", err)
+		return
+	}
 	app, err := di.InitApp()
 	if err != nil {
 		log.Fatalf("failed to init app: %v", err)
@@ -41,7 +47,10 @@ func main() {
 
 	// Đăng ký middleware
 	//jwtComp := jwt.NewJwt(app.Cfg.Jwt)
-	//app.Server.Use(jwt.AuthMiddleware(jwtComp))
+	app.Server.Use(func(c core.Context) {
+		c.Set("requestId", uuid.NewString())
+		c.Next()
+	})
 	app.Server.RegisterHandlersWithTags(app.Handlers...)
 	app.Server.HealthCheck()
 
@@ -65,8 +74,6 @@ func main() {
 	// Đợi signal để shutdown
 	<-sigChan
 
-	// In metrics trước khi shutdown
-	middleware.GetMetrics().PrintMetrics()
 }
 
 func Pong() core.Handler {

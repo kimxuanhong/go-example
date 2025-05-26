@@ -1,8 +1,8 @@
 package http
 
 import (
-	"fmt"
 	"github.com/kimxuanhong/go-example/internal/infrastructure/external"
+	"github.com/kimxuanhong/go-logger/logger"
 	"github.com/kimxuanhong/go-server/core"
 	"net/http"
 
@@ -24,9 +24,10 @@ func NewUserHandler(userFacade *facade.UserFacade, accountClient *external.Accou
 // GetUser
 // @Api GET /users/:user
 func (h *UserHandler) GetUser(c core.Context) {
+	logger.Log.Info(c.Context().Value("requestId"))
+	log := logger.WithContext(c.Context())
 	userName := c.Param("user")
-	id := c.Query("id")
-	fmt.Println("id= " + id)
+	log.Infof("id= %s", "123124124123213213")
 	user, err := h.userFacade.GetUser(c.Context(), userName)
 	if err != nil {
 		HandleError(c, err)
